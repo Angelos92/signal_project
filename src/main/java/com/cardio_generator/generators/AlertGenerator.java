@@ -10,10 +10,21 @@ public class AlertGenerator implements PatientDataGenerator {
     private boolean[] alertStates; // false = resolved, true = pressed
                                    // fields name should be lowerCamelCase, not start with uppercase. (alertStates)
 
+    /***
+     * Constructor for AlertGenerator. It initializes the alert states for each patient to false (resolved).
+     * @param patientCount the total number of patients for which to generate alert data
+     */                               
     public AlertGenerator(int patientCount) {
         alertStates = new boolean[patientCount + 1];
     }
 
+    /***
+     * Generates alert data for a specific patient and outputs it using the provided strategy. The method 
+     * simulates the triggering and resolving of alerts based on a random process.
+     * @param patientId the ID of the patient for whom to generate alert data
+     * @param outputStrategy the strategy to use for outputting the generated data
+     * @throws Exception if there is an error during data generation or outputting the data
+     */
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {
         try {

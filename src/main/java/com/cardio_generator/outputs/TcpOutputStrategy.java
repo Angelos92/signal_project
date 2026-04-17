@@ -12,6 +12,11 @@ public class TcpOutputStrategy implements OutputStrategy {
     private Socket clientSocket;
     private PrintWriter out;
 
+    /***
+     * Constructor for TcpOutputStrategy. It initializes the TCP server on the specified port.
+     * @param port the port number on which the TCP server will listen for incoming client connections.
+     * @throws IOException if there is an error starting the TCP server or accepting client connections
+     */
     public TcpOutputStrategy(int port) {
         try {
             serverSocket = new ServerSocket(port);
