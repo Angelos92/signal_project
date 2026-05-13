@@ -86,5 +86,9 @@ DataRetriever handles access to stored records instead of allowing other parts o
 DeletionPolicy is included to represent data retention rules, such as removing records older than a certain number of days. DataReader is modeled as an interface so different input sources can load data into storage without changing DataStorage. This keeps the system flexible and supports future extensions.
 
 ## Patient Identification System
+The Patient Identification System is designed to ensure that incoming simulator data is linked to the correct real hospital patient. PatientIdentifier performs the main matching logic by comparing simulator patient IDs against PatientIDMapping objects. Each mapping connects a simulator ID to a hospital patient ID, which can then be used to retrieve the corresponding HospitalPatient record.
 
+HospitalPatient represents the real patient information stored in the hospital system, including identity details and medical history. IdentityManager coordinates the identification process and acts as the main entry point for the subsystem. If no matching patient is found, it delegates the problem to IdentityMismatchHandler, which creates and stores an IdentityAnomaly. This keeps error handling separate from matching logic and makes the system easier to maintain.
+
+The design separates matching, patient information, and anomaly handling into different classes, which supports modularity and clear responsibility.
 ## Data Access / Side Simulator System
