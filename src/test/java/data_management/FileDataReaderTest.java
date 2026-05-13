@@ -29,7 +29,9 @@ class FileDataReaderTest {
                 "Patient ID: 1, Timestamp: 1001, Label: ECG, Data: 0.5\n"
         );
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
+
         FileDataReader reader = new FileDataReader(tempDir.toString());
 
         reader.readData(storage);
@@ -52,7 +54,9 @@ class FileDataReaderTest {
                 "Patient ID: 2, Timestamp: 2000, Label: ECG, Data: 0.7\n"
         );
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
+
         FileDataReader reader = new FileDataReader(tempDir.toString());
 
         reader.readData(storage);

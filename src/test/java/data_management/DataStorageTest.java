@@ -14,7 +14,8 @@ class DataStorageTest {
 
     @Test
     void testAddAndGetRecords() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         storage.addPatientData(1, 100.0, "WhiteBloodCells", 1714376789050L);
         storage.addPatientData(1, 200.0, "WhiteBloodCells", 1714376789051L);
@@ -33,7 +34,8 @@ class DataStorageTest {
 
     @Test
     void testGetRecordsReturnsEmptyListForUnknownPatient() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         List<PatientRecord> records = storage.getRecords(
                 999,
@@ -46,7 +48,8 @@ class DataStorageTest {
 
     @Test
     void testGetPatientReturnsCorrectPatient() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         storage.addPatientData(5, 98.0, "Saturation", 1000L);
 
@@ -58,7 +61,8 @@ class DataStorageTest {
 
     @Test
     void testGetAllPatientsReturnsAllPatients() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         storage.addPatientData(1, 98.0, "Saturation", 1000L);
         storage.addPatientData(2, 120.0, "SystolicPressure", 1001L);

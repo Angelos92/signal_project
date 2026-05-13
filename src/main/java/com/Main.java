@@ -22,7 +22,8 @@ public class Main {
     }
 
     private static void runDataStorageDemo() {
-        DataStorage storage = new DataStorage();
+       DataStorage storage = DataStorage.getInstance();
+       storage.clear();
 
         long now = System.currentTimeMillis();
         storage.addPatientData(1, 145.0, "HeartRate", now);

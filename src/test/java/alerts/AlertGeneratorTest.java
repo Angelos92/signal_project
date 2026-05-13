@@ -16,7 +16,8 @@ class AlertGeneratorTest {
 
     @Test
     void testLowOxygenSaturationAlert() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         AlertManager alertManager = new AlertManager();
         AlertGenerator alertGenerator = new AlertGenerator(storage, alertManager);
 
@@ -34,7 +35,8 @@ class AlertGeneratorTest {
 
     @Test
     void testCriticalSystolicPressureAlert() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         AlertManager alertManager = new AlertManager();
         AlertGenerator alertGenerator = new AlertGenerator(storage, alertManager);
 
@@ -52,7 +54,8 @@ class AlertGeneratorTest {
 
     @Test
     void testCriticalDiastolicPressureAlert() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         AlertManager alertManager = new AlertManager();
         AlertGenerator alertGenerator = new AlertGenerator(storage, alertManager);
 
@@ -70,7 +73,8 @@ class AlertGeneratorTest {
 
     @Test
     void testBloodPressureIncreasingTrendAlert() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();        
         AlertManager alertManager = new AlertManager();
         AlertGenerator alertGenerator = new AlertGenerator(storage, alertManager);
 
@@ -93,7 +97,8 @@ class AlertGeneratorTest {
 
     @Test
     void testRapidOxygenDropAlert() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         AlertManager alertManager = new AlertManager();
         AlertGenerator alertGenerator = new AlertGenerator(storage, alertManager);
 
@@ -115,7 +120,8 @@ class AlertGeneratorTest {
 
     @Test
     void testHypotensiveHypoxemiaAlert() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         AlertManager alertManager = new AlertManager();
         AlertGenerator alertGenerator = new AlertGenerator(storage, alertManager);
 
@@ -137,7 +143,8 @@ class AlertGeneratorTest {
 
     @Test
     void testManualTriggeredAlert() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         AlertManager alertManager = new AlertManager();
         AlertGenerator alertGenerator = new AlertGenerator(storage, alertManager);
 
