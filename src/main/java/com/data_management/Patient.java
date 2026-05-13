@@ -69,4 +69,14 @@ public class Patient {
     public int getPatientId() {
         return patientId;
     }
+
+    /**
+     * Removes records that should be deleted according to the deletion policy.
+     *
+     * @param deletionPolicy the deletion policy to apply
+     * @param currentTime the current time in milliseconds since epoch
+     */
+    public void removeOldRecords(DeletionPolicy deletionPolicy, long currentTime) {
+        patientRecords.removeIf(record -> deletionPolicy.shouldDelete(record, currentTime));
+    }
 }

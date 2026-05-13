@@ -74,6 +74,29 @@ public class DataStorage {
         return new ArrayList<>(patientMap.values());
     }
 
+     /**
+     * Retrieves a patient by ID.
+     *
+     * @param patientId the unique identifier of the patient
+     * @return the Patient object, or null if no patient exists
+     */
+    public Patient getPatient(int patientId) {
+        return patientMap.get(patientId);
+    }
+
+    /**
+     * Applies the deletion policy to all stored patient records.
+     *
+     * @param deletionPolicy the policy that decides which records should be removed
+     */
+    public void applyDeletionPolicy(DeletionPolicy deletionPolicy) {
+        long currentTime = System.currentTimeMillis();
+
+        for (Patient patient : patientMap.values()) {
+            patient.removeOldRecords(deletionPolicy, currentTime);
+        }
+    }
+
     /**
      * The main method for the DataStorage class.
      * Initializes the system, reads data into storage, and continuously monitors

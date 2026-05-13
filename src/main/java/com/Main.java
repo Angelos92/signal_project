@@ -1,21 +1,39 @@
 package com;
 
-import com.alerts.AlertGenerator;
-import com.alerts.AlertManager;
+import com.data_management.AccessController;
+import com.data_management.AuditLog;
+import com.data_management.DataRetriever;
 import com.data_management.DataStorage;
-import com.data_management.Patient;
+import com.data_management.DeletionPolicy;
+import com.data_management.PatientRecord;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         DataStorage storage = new DataStorage();
-        AlertManager alertManager = new AlertManager();
-        AlertGenerator alertGenerator = new AlertGenerator(storage, alertManager);
 
         storage.addPatientData(1, 145.0, "HeartRate", System.currentTimeMillis());
         storage.addPatientData(1, 88.0, "BloodSaturation", System.currentTimeMillis());
 
-        for (Patient patient : storage.getAllPatients()) {
-            alertGenerator.evaluateData(patient);
+        AccessController accessController = new AccessController();
+        AuditLog auditLog = new AuditLog();
+        DataRetriever retriever = new DataRetriever(storage, accessController, auditLog);
+
+        List<PatientRecord> records = retriever.getPatientRecords(
+                1,
+                System.currentTimeMillis() - 10_000,
+                System.currentTimeMillis(),
+                "Doctor"
+        );
+
+        for (PatientRecord record : records) {
+            System.out.println(record.getRecordType() + ": " + record.getMeasurementValue());
         }
+
+        DeletionPolicy deletionPolicy = new DeletionPolicy(30);
+        storage.applyDeletionPolicy(deletionPolicy);
+
+        System.out.println(auditLog.getLogEntries());
     }
 }
