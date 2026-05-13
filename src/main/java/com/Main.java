@@ -1,5 +1,6 @@
 package com;
 
+import com.cardio_generator.HealthDataSimulator;
 import com.data_management.AccessController;
 import com.data_management.AuditLog;
 import com.data_management.DataRetriever;
@@ -10,30 +11,31 @@ import com.data_management.PatientRecord;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+
+
+    public static void main(String[] args) throws Exception {
+        if (args.length > 0 && args[0].equalsIgnoreCase("DataStorage")) {
+            runDataStorageDemo();
+        } else {
+            HealthDataSimulator.main(args);
+        }
+    }
+
+    private static void runDataStorageDemo() {
         DataStorage storage = new DataStorage();
 
-        storage.addPatientData(1, 145.0, "HeartRate", System.currentTimeMillis());
-        storage.addPatientData(1, 88.0, "BloodSaturation", System.currentTimeMillis());
+        long now = System.currentTimeMillis();
+        storage.addPatientData(1, 145.0, "HeartRate", now);
 
-        AccessController accessController = new AccessController();
-        AuditLog auditLog = new AuditLog();
-        DataRetriever retriever = new DataRetriever(storage, accessController, auditLog);
-
-        List<PatientRecord> records = retriever.getPatientRecords(
-                1,
-                System.currentTimeMillis() - 10_000,
-                System.currentTimeMillis(),
-                "Doctor"
-        );
+        List<PatientRecord> records = storage.getRecords(1, now - 1000, now + 1000);
 
         for (PatientRecord record : records) {
-            System.out.println(record.getRecordType() + ": " + record.getMeasurementValue());
+            System.out.println(
+                    "Patient ID: " + record.getPatientId()
+                            + ", Type: " + record.getRecordType()
+                            + ", Value: " + record.getMeasurementValue()
+                            + ", Timestamp: " + record.getTimestamp()
+            );
         }
-
-        DeletionPolicy deletionPolicy = new DeletionPolicy(30);
-        storage.applyDeletionPolicy(deletionPolicy);
-
-        System.out.println(auditLog.getLogEntries());
     }
 }
