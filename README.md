@@ -77,4 +77,4 @@ This project includes four UML class diagrams for the Cardiovascular Health Moni
 3. Patient Identification System
 4. Data Access Layer
 
-The UML diagrams and their explanations are available in the ['uml_models'](./target/classes/uml_models/) directory.
+The UML diagrams and their explanations are available in the [`uml_models`](./uml_models) directory.
