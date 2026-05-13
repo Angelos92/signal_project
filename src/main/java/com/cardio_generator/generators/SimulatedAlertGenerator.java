@@ -4,7 +4,7 @@ package com.cardio_generator.generators;
 import com.cardio_generator.outputs.OutputStrategy;
 import java.util.Random;
 
-public class AlertGenerator implements PatientDataGenerator {
+public class SimulatedAlertGenerator implements PatientDataGenerator {
 
     public static final Random RANDOM_GENERATOR = new Random(); // static final fields should be in upper case with underscores (RANDOM_GENERATOR)
     private boolean[] alertStates; // false = resolved, true = pressed
@@ -13,8 +13,9 @@ public class AlertGenerator implements PatientDataGenerator {
     /***
      * Constructor for AlertGenerator. It initializes the alert states for each patient to false (resolved).
      * @param patientCount the total number of patients for which to generate alert data
+     * @returns an instance of AlertGenerator with initialized alert states for each patient, d
      */                               
-    public AlertGenerator(int patientCount) {
+    public SimulatedAlertGenerator(int patientCount) {
         alertStates = new boolean[patientCount + 1];
     }
 

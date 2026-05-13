@@ -66,3 +66,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Project members
 - student ID: 6381457
+
+# UML diagram - Description
+(write the discreption for each class diagram here)

@@ -2,51 +2,75 @@ package com.alerts;
 
 import com.data_management.DataStorage;
 import com.data_management.Patient;
+import com.data_management.PatientRecord;
 
-/**
- * The {@code AlertGenerator} class is responsible for monitoring patient data
- * and generating alerts when certain predefined conditions are met. This class
- * relies on a {@link DataStorage} instance to access patient data and evaluate
- * it against specific health criteria.
- */
+import java.util.List;
+
 public class AlertGenerator {
+    private static final long RECENT_TIME_WINDOW_MS = 5 * 60 * 1000;
+
+    private static final double MAX_HEART_RATE = 130.0;
+    private static final double MIN_OXYGEN_SATURATION = 90.0;
+    private static final double MAX_BLOOD_PRESSURE = 140.0;
+
     private DataStorage dataStorage;
+    private AlertManager alertManager;
 
-    /**
-     * Constructs an {@code AlertGenerator} with a specified {@code DataStorage}.
-     * The {@code DataStorage} is used to retrieve patient data that this class
-     * will monitor and evaluate.
-     *
-     * @param dataStorage the data storage system that provides access to patient
-     *                    data
-     */
-    public AlertGenerator(DataStorage dataStorage) {
+    public AlertGenerator(DataStorage dataStorage, AlertManager alertManager) {
         this.dataStorage = dataStorage;
+        this.alertManager = alertManager;
     }
 
-    /**
-     * Evaluates the specified patient's data to determine if any alert conditions
-     * are met. If a condition is met, an alert is triggered via the
-     * {@link #triggerAlert}
-     * method. This method should define the specific conditions under which an
-     * alert
-     * will be triggered.
-     *
-     * @param patient the patient data to evaluate for alert conditions
-     */
     public void evaluateData(Patient patient) {
-        // Implementation goes here
+        long currentTime = System.currentTimeMillis();
+        long startTime = currentTime - RECENT_TIME_WINDOW_MS;
+
+        List<PatientRecord> recentRecords = patient.getRecords(startTime, currentTime);
+
+        for (PatientRecord record : recentRecords) {
+            Alert alert = createAlertIfCritical(record);
+
+            if (alert != null) {
+                alertManager.dispatchAlert(alert);
+            }
+        }
     }
 
-    /**
-     * Triggers an alert for the monitoring system. This method can be extended to
-     * notify medical staff, log the alert, or perform other actions. The method
-     * currently assumes that the alert information is fully formed when passed as
-     * an argument.
-     *
-     * @param alert the alert object containing details about the alert condition
-     */
-    private void triggerAlert(Alert alert) {
-        // Implementation might involve logging the alert or notifying staff
+    private Alert createAlertIfCritical(PatientRecord record) {
+        String recordType = record.getRecordType();
+        double value = record.getMeasurementValue();
+
+        if ((recordType.equalsIgnoreCase("HeartRate")
+                || recordType.equalsIgnoreCase("ECG"))
+                && value > MAX_HEART_RATE) {
+
+            return new Alert(
+                    String.valueOf(record.getPatientId()),
+                    "High heart rate: " + value,
+                    record.getTimestamp()
+            );
+        }
+
+        if (recordType.equalsIgnoreCase("BloodSaturation")
+                && value < MIN_OXYGEN_SATURATION) {
+
+            return new Alert(
+                    String.valueOf(record.getPatientId()),
+                    "Low oxygen saturation: " + value,
+                    record.getTimestamp()
+            );
+        }
+
+        if (recordType.equalsIgnoreCase("BloodPressure")
+                && value > MAX_BLOOD_PRESSURE) {
+
+            return new Alert(
+                    String.valueOf(record.getPatientId()),
+                    "High blood pressure: " + value,
+                    record.getTimestamp()
+            );
+        }
+
+        return null;
     }
 }

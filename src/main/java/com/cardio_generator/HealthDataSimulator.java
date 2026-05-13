@@ -4,7 +4,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.cardio_generator.generators.AlertGenerator;
+import com.cardio_generator.generators.SimulatedAlertGenerator;
 
 import com.cardio_generator.generators.BloodPressureDataGenerator;
 import com.cardio_generator.generators.BloodSaturationDataGenerator;
@@ -35,6 +35,7 @@ public class HealthDataSimulator {
     /***
      *  Main method to start the HealthDataSimulator. it parses comman-line arguments to configure the simulation,
      * initializes the scheduled executor service, and schedules tasks for generating health data for each patient.
+     * The class send the data
      * @param args command-line arguments to configure the simulation (e.g., patient count, output method)
      * @throws IOException 
      */
@@ -159,7 +160,7 @@ public class HealthDataSimulator {
         BloodSaturationDataGenerator bloodSaturationDataGenerator = new BloodSaturationDataGenerator(patientCount);
         BloodPressureDataGenerator bloodPressureDataGenerator = new BloodPressureDataGenerator(patientCount);
         BloodLevelsDataGenerator bloodLevelsDataGenerator = new BloodLevelsDataGenerator(patientCount);
-        AlertGenerator alertGenerator = new AlertGenerator(patientCount);
+        SimulatedAlertGenerator alertGenerator = new SimulatedAlertGenerator(patientCount);
 
         for (int patientId : patientIds) {
             scheduleTask(() -> ecgDataGenerator.generate(patientId, outputStrategy), 1, TimeUnit.SECONDS);
