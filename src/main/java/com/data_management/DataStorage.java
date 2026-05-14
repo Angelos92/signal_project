@@ -14,18 +14,18 @@ public class DataStorage {
         this.patientMap = new HashMap<>();
     }
 
-    public static DataStorage getInstance() {
+    public static synchronized DataStorage getInstance() {
         if (instance == null) {
             instance = new DataStorage();
         }
         return instance;
     }
 
-    public void clear() {
+    public synchronized void clear() {
         patientMap.clear();
     }
 
-    public void addPatientData(int patientId, double measurementValue, String recordType, long timestamp) {
+    public synchronized void addPatientData(int patientId, double measurementValue, String recordType, long timestamp) {
         Patient patient = patientMap.get(patientId);
 
         if (patient == null) {
@@ -36,7 +36,7 @@ public class DataStorage {
         patient.addRecord(measurementValue, recordType, timestamp);
     }
 
-    public List<PatientRecord> getRecords(int patientId, long startTime, long endTime) {
+    public synchronized List<PatientRecord> getRecords(int patientId, long startTime, long endTime) {
         Patient patient = patientMap.get(patientId);
 
         if (patient != null) {
@@ -46,15 +46,15 @@ public class DataStorage {
         return new ArrayList<>();
     }
 
-    public List<Patient> getAllPatients() {
+    public synchronized List<Patient> getAllPatients() {
         return new ArrayList<>(patientMap.values());
     }
 
-    public Patient getPatient(int patientId) {
+    public synchronized Patient getPatient(int patientId) {
         return patientMap.get(patientId);
     }
 
-    public void applyDeletionPolicy(DeletionPolicy deletionPolicy) {
+    public synchronized void applyDeletionPolicy(DeletionPolicy deletionPolicy) {
         long currentTime = System.currentTimeMillis();
 
         for (Patient patient : patientMap.values()) {
