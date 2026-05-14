@@ -21,31 +21,41 @@ public class WebSocketDataClient extends WebSocketClient {
 
     public WebSocketDataClient(URI serverUri, DataStorage dataStorage) {
         super(serverUri);
+
+        // Store a reference to the shared DataStorage 
         this.dataStorage = dataStorage;
+
+        // Reuse the parser so WebSocket messages are converted into the same PatientRecord format used by the rest of the system.
         this.parser = new PatientDataParser();
+
+        // Track connection state for testing and error handling.
         this.connected = false;
         this.lastErrorMessage = null;
     }
 
     @Override
     public void onOpen(ServerHandshake handshake) {
+        // Mark the client as connected once the WebSocket handshake succeeds.
         connected = true;
         System.out.println("Connected to WebSocket server.");
     }
 
     @Override
     public void onMessage(String message) {
+        // Every message received from the WebSocket server is processed immediately so patient data is stored in real time. 
         processMessage(message);
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
+        // If the connection closes, mark the client as disconnected.
         connected = false;
         System.out.println("WebSocket connection closed: " + reason);
     }
 
     @Override
     public void onError(Exception ex) {
+        // Store the latest error 
         lastErrorMessage = ex.getMessage();
         System.err.println("WebSocket error: " + ex.getMessage());
     }
@@ -58,8 +68,11 @@ public class WebSocketDataClient extends WebSocketClient {
      */
     public void processMessage(String message) {
         try {
+            // Parse the raw WebSocket message into a standard PatientRecord.
+            // Expected WebSocket format: patientId,timestamp,label,data
             PatientRecord record = parser.parse(message);
 
+            // Store the parsed patient data using the existing storage method.
             dataStorage.addPatientData(
                     record.getPatientId(),
                     record.getMeasurementValue(),
@@ -67,6 +80,7 @@ public class WebSocketDataClient extends WebSocketClient {
                     record.getTimestamp()
             );
         } catch (IllegalArgumentException e) {
+            // If a message is corrupted, incomplete, or cannot be parsed, skip it instead of stopping the real-time data stream.
             lastErrorMessage = "Invalid message skipped: " + message;
             System.err.println(lastErrorMessage);
         }
