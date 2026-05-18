@@ -12,8 +12,8 @@ The Alert class is kept simple because it only represents alert information: the
 contain detection or routing logic. AlertManager is responsible for dispatching alerts, which keeps the system easier to extend later. For 
 example, alert routing could later be changed to notify nurses, doctors, or external systems without changing the threshold-checking logic.
 
-DataStorage, Patient, and PatientRecord are included as supporting classes because alerts are based on stored patient measurements. The design 
-follows separation of concerns: storage classes store data, AlertGenerator evaluates data, and AlertManager handles alert routing.
+DataStorage, Patient, and PatientRecord are included as supporting classes because alerts are based on stored patient measurements. The 
+design follows separation of concerns: storage classes store data, AlertGenerator evaluates data, and AlertManager handles alert routing.
 
 ## Data Storage System
 
@@ -36,16 +36,16 @@ PatientIdentifier performs the main matching logic by comparing simulator patien
 a simulator ID to a hospital patient ID, which can then be used to retrieve the corresponding HospitalPatient record.
 
 HospitalPatient represents the real patient information stored in the hospital system, including identity details and medical history. 
-IdentityManager coordinates the identification process and acts as the main entry point for the subsystem. If no matching patient is found, it 
-delegates the problem to IdentityMismatchHandler, which creates and stores an IdentityAnomaly. It keeps error handling separate from matching 
-logic and makes the system easier to maintain.
+IdentityManager coordinates the identification process and acts as the main entry point for the subsystem. If no matching patient is found, 
+it delegates the problem to IdentityMismatchHandler, which creates and stores an IdentityAnomaly. It keeps error handling separate from 
+matching logic and makes the system easier to maintain.
 
 The design separates matching, patient information, and anomaly handling into different classes, which supports modularity and clear 
 responsibility.
 ## Data Access / Side Simulator System
-The Data Access Layer is designed to isolate the CHMS from the way external data arrives. The DataListener interface defines a common contract 
-for receiving raw data, while TCPDataListener, WebSocketDataListener, and FileDataListener provide source-specific implementations. It allows 
-the system to support different input methods without changing the rest of the application.
+The Data Access Layer is designed to isolate the CHMS from the way external data arrives. The DataListener interface defines a common 
+contract for receiving raw data, while TCPDataListener, WebSocketDataListener, and FileDataListener provide source-specific implementations. 
+It allows the system to support different input methods without changing the rest of the application.
 
 RawDataMessage represents the unprocessed data received from an external source. DataParser validates and converts that raw input into a 
 standardized PatientRecord object. SO, it keeps parsing logic separate from network or file-reading logic. DataSourceAdapter coordinates the 
